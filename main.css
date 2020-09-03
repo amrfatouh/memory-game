@@ -12,10 +12,24 @@
 
 body {
     font-family: Arial, Helvetica, sans-serif;
+    position: relative;
 }
 
 .no-clicking {
     pointer-events: none;
+}
+
+.options {
+    width: 250px;
+    background-color: #daa;
+    padding: 15px;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.options h2 {
+    margin-bottom: 10px;
 }
 
 .overlay {

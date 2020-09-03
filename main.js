@@ -4,20 +4,33 @@
 //     document.querySelector('.overlay').remove();
 // }
 
+
+
 let cardContainer = document.querySelector('.card-container');
+let cards = document.querySelectorAll('.card');
 
 let TRANSITION_DURATION = 500
 let TIMEOUT_DURATION = TRANSITION_DURATION * 2;
+let GAME_DIFFICULTY = 'easy'
+
+document.querySelectorAll('.options input').forEach(radio => {
+    radio.onclick = function () {
+        if (confirm('Your progress will be erased. Are you sure?')) {
+            setUpGame(radio.dataset.difficulty);
+        } else {
+            // radio.checked = false;
+            document.querySelector(`.options input[data-difficulty=${GAME_DIFFICULTY}]`).checked = true;
+        }
+    }
+})
 
 setUpGame('easy');
-
-let cards = document.querySelectorAll('.card');
 
 //filling cards with data-imgid 
 //(filling each two consecutive cards with the same image id)
 cards.forEach((card, i) => {
     if (card.getAttribute('data-imgid') == null) {
-        let imgId = Math.ceil(Math.random() * 100) * 10;
+        let imgId = Math.ceil(Math.random() * 100) + 100;
         card.setAttribute('data-imgid', imgId);
         cards[i + 1].setAttribute('data-imgid', imgId);
     }
@@ -103,6 +116,9 @@ function setDimensions(difficulty) {
 
 //creating all cards
 function createCards(num) {
+    cards.forEach((card, i) => {
+        if (i != 0) card.remove();
+    })
     let cardModel = document.querySelector('.card');
     for (let i = 0; i < num; i++) {
         let newCard = cardModel.cloneNode(true);
@@ -113,6 +129,7 @@ function createCards(num) {
 }
 
 function setUpGame(difficulty) {
+    GAME_DIFFICULTY = difficulty;
     setDimensions(difficulty);
     switch (difficulty) {
         case 'easy':
@@ -125,4 +142,5 @@ function setUpGame(difficulty) {
             createCards(48);
             break;
     }
+    cards = document.querySelectorAll('.card');
 }
