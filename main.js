@@ -13,6 +13,7 @@ let TRANSITION_DURATION = 500
 let TIMEOUT_DURATION = TRANSITION_DURATION * 2;
 let GAME_DIFFICULTY = 'easy'
 
+//choosing difficulty
 document.querySelectorAll('.options input').forEach(radio => {
     radio.onclick = function () {
         if (confirm('Your progress will be erased. Are you sure?')) {
@@ -30,11 +31,19 @@ setUpGame('easy');
 //(filling each two consecutive cards with the same image id)
 cards.forEach((card, i) => {
     if (card.getAttribute('data-imgid') == null) {
-        let imgId = Math.ceil(Math.random() * 100) + 100;
+        let imgId = chooseId();
         card.setAttribute('data-imgid', imgId);
         cards[i + 1].setAttribute('data-imgid', imgId);
     }
 })
+function chooseId() {
+    let id;
+    do {
+        id = Math.ceil(Math.random() * 80) + 1000;
+    } while ([1007, 1017, 1030, 1034, 1046].includes(id))
+    return id;
+}
+
 //settign cards background
 let backImgSize = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-size'));
 document.querySelectorAll('.card .back').forEach(cardBack => {
