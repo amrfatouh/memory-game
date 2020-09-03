@@ -42,20 +42,31 @@ body {
     z-index: 2;
 }
 
-.overlay button {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 7px 40px;
-    letter-spacing: 1px;
+.overlay button, .overlay select {
+    padding: 7px 30px;
     font-weight: bold;
     color: #fff;
     background-color: #5aa;
     border: 3px solid #377;
     border-radius: 7px;
     cursor: pointer;
+    letter-spacing: 1px;
+}
+
+.overlay button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     font-size: 40px;
+}
+
+.overlay select {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 25px;
 }
 
 .info {
