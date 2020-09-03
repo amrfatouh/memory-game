@@ -27,6 +27,17 @@ document.querySelectorAll('.options input').forEach(radio => {
 
 setUpGame('easy');
 
+//making an array of valid IDs in the website picsum.photos
+let imageIdArr = Array.from(Array(80).keys()).map(x => x + 1000);
+imageIdArr.forEach((x, i) => {
+    if ([1007, 1017, 1030, 1034, 1046].includes(x)) {
+        imageIdArr.splice(i, 1);
+    }
+})
+function chooseId() {
+    let random = Math.floor(Math.random() * imageIdArr.length)
+    return imageIdArr.splice(random, 1)[0];
+}
 //filling cards with data-imgid 
 //(filling each two consecutive cards with the same image id)
 cards.forEach((card, i) => {
@@ -36,13 +47,7 @@ cards.forEach((card, i) => {
         cards[i + 1].setAttribute('data-imgid', imgId);
     }
 })
-function chooseId() {
-    let id;
-    do {
-        id = Math.ceil(Math.random() * 80) + 1000;
-    } while ([1007, 1017, 1030, 1034, 1046].includes(id))
-    return id;
-}
+
 
 //settign cards background
 let backImgSize = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-size'));
