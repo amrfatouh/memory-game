@@ -5,10 +5,13 @@
 // }
 
 let cardContainer = document.querySelector('.card-container');
-let cards = document.querySelectorAll('.card');
 
 let TRANSITION_DURATION = 500
 let TIMEOUT_DURATION = TRANSITION_DURATION * 2;
+
+setUpGame('easy');
+
+let cards = document.querySelectorAll('.card');
 
 //filling cards with data-imgid 
 //(filling each two consecutive cards with the same image id)
@@ -94,6 +97,32 @@ function setDimensions(difficulty) {
             document.documentElement.style.setProperty('--container-height', '360px');
             document.documentElement.style.setProperty('--card-size', '50px');
             document.documentElement.style.setProperty('--card-margin', '5px');
+            break;
+    }
+}
+
+//creating all cards
+function createCards(num) {
+    let cardModel = document.querySelector('.card');
+    for (let i = 0; i < num; i++) {
+        let newCard = cardModel.cloneNode(true);
+        newCard.style.display = 'block';
+        cardContainer.appendChild(newCard);
+    }
+    cardModel.remove();
+}
+
+function setUpGame(difficulty) {
+    setDimensions(difficulty);
+    switch (difficulty) {
+        case 'easy':
+            createCards(20);
+            break;
+        case 'intermediate':
+            createCards(30);
+            break;
+        case 'hard':
+            createCards(48);
             break;
     }
 }
