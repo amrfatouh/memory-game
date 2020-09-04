@@ -137,7 +137,7 @@ function setDimensions(difficulty) {
             document.documentElement.style.setProperty('--card-margin', '8px');
             break;
         case 'hard':
-            document.documentElement.style.setProperty('--card-width', '150px');
+            document.documentElement.style.setProperty('--card-width', '149px');
             document.documentElement.style.setProperty('--card-height', '73px');
             document.documentElement.style.setProperty('--card-margin', '5px');
             break;

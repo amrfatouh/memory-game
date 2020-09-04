@@ -110,11 +110,13 @@ body {
     height: var(--container-height);
     margin: auto;
     padding: 5px;
-    background-color: #eee;
+    background-color: rgb(236, 203, 233);
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
     position: relative;
+    border-radius: 20px;
+    border: 3px solid rgb(206, 133, 199);
 }
 
 .card-container .card {
@@ -123,6 +125,8 @@ body {
     margin: var(--card-margin);
     position: relative;
     cursor: pointer;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .card .front, .card .back {
@@ -139,6 +143,12 @@ body {
     z-index: 1;
     background-color: #ccc;
     backface-visibility: hidden;
+    background-image: url('card-background.jpg');
+    background-size: cover;
+    background-position: center;
+    border: 3px solid #fff;
+    box-sizing: border-box;
+    border-radius: 10px;
 }
 
 .card .back {
