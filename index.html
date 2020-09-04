@@ -9,28 +9,34 @@
 
 <body>
 
-    <div class="overlay">
+    <!-- <div class="overlay">
         <button class="start">Start</button>
         <select>
             <option value="easy">Easy</option>
             <option value="intermediate">Intermediate</option>
             <option value="hard">Hard</option>
         </select>
-    </div>
+    </div> -->
 
-    <div class="options">
-        <h2>difficulty</h2>
-        <input type="radio" name="diff" data-difficulty='easy' checked> easy <br>
-        <input type="radio" name="diff" data-difficulty='intermediate'> intermediate <br>
-        <input type="radio" name="diff" data-difficulty='hard'> hard
-    </div>
+    <div class="game-extras">
+        <div class="options">
+            <h2>Difficulty: </h2>
+            <input type="radio" id='easy' name="diff" data-difficulty='easy'>
+            <label for="easy">easy</label>
+            <input type="radio" name="diff" data-difficulty='intermediate'>
+            <label for="intermediate">intermediate</label>
+            <input type="radio" name="diff" data-difficulty='hard'>
+            <label for="hard">hard</label>
+        </div>
 
-    <div class="info">
-        <div class="name">name: <span></span></div>
-        <div class="game-info">
-            <span class='wrong-tries'>wrong tries: <span class="tries-num">0</span> </span>
+        <div class="info">
+            <div class="name">name: <span></span></div>
+            <div class="game-info">
+                <span class='wrong-tries'>wrong tries: <span class="tries-num">0</span> </span>
+            </div>
         </div>
     </div>
+
     <div class="card-container">
         <div class="card" style='display: none;'>
             <div class="front"></div>

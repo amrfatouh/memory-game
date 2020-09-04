@@ -1,25 +1,27 @@
 //starting the game
-document.querySelector('.overlay button').onclick = () => {
-    document.querySelector('.info .name span').textContent = prompt('Enter your name: ') || 'unnamed';
-    GAME_DIFFICULTY = document.querySelector('.overlay select').value;
-    setUpGame(GAME_DIFFICULTY);
-    document.querySelector('.overlay').remove();
-}
+// document.querySelector('.overlay button').onclick = () => {
+//     document.querySelector('.info .name span').textContent = prompt('Enter your name: ') || 'unnamed';
+//     GAME_DIFFICULTY = document.querySelector('.overlay select').value;
+//     setUpGame(GAME_DIFFICULTY);
+//     document.querySelector('.overlay').remove();
+// }
 
 
 
 let cardContainer = document.querySelector('.card-container');
 let cards = document.querySelectorAll('.card.playable');
 let imageIdArr = makeImageIdArr();
+let radios = document.querySelectorAll('.options input');
 
 let TRANSITION_DURATION = 500
 let TIMEOUT_DURATION = TRANSITION_DURATION * 2;
-let GAME_DIFFICULTY = document.querySelector('.overlay select').value;
+// let GAME_DIFFICULTY = document.querySelector('.overlay select').value;
 
+GAME_DIFFICULTY = 'easy' //temporarily set to easy
 setUpGame(GAME_DIFFICULTY);
 
 //choosing difficulty
-document.querySelectorAll('.options input').forEach(radio => {
+radios.forEach(radio => {
     radio.onclick = function () {
         if (confirm('Your progress will be erased. Are you sure?')) {
             setUpGame(radio.dataset.difficulty);
@@ -159,6 +161,7 @@ function createCards(num) {
 
 function setUpGame(difficulty) {
     GAME_DIFFICULTY = difficulty;
+    Array.from(radios).find(radio => radio.dataset.difficulty === GAME_DIFFICULTY).checked = true;
     setDimensions(difficulty);
     switch (difficulty) {
         case 'easy':
