@@ -109,6 +109,21 @@ function handleMatch(card1, card2) {
         card.classList.add('no-clicking');
     });
     cardContainer.classList.remove('no-clicking');
+    if (Array.from(cards).filter(card => card.classList.contains('no-clicking')).length === cards.length) {
+        win();
+    }
+}
+
+function win() {
+    let winDiv = document.querySelector('.win');
+    winDiv.style.display = 'block';
+    winDiv.style.opacity = '1';
+    cardContainer.style.filter = 'blur(5px)'
+    setTimeout(() => {
+        winDiv.style.opacity = '0';
+        setTimeout(() => winDiv.style.display = 'none', 700);
+        cardContainer.style.filter = 'blur(0px)'
+    }, 3000)
 }
 
 function shuffle() {
@@ -157,8 +172,16 @@ function createCards(num) {
     // cardModel.remove();
 }
 
+function flipAllCards() {
+    cards.forEach(card => {
+        card.classList.add('flipped');
+        setTimeout(() => cards.forEach(card => card.classList.remove('flipped')), TIMEOUT_DURATION);
+    })
+}
+
 function setUpGame(difficulty) {
     GAME_DIFFICULTY = difficulty;
+    //checking the right radio button (specially for the first time the game starts)
     Array.from(radios).find(radio => radio.dataset.difficulty === GAME_DIFFICULTY).checked = true;
     setDimensions(difficulty);
     switch (difficulty) {
@@ -173,7 +196,9 @@ function setUpGame(difficulty) {
             break;
     }
     cards = document.querySelectorAll('.card.playable');
+    setTimeout(flipAllCards, 1000);
     addEventListenersForCards();
+    imageIdArr = makeImageIdArr();
     fillCardsWithId();
     setCardsBackgroundFromData();
     shuffle();
