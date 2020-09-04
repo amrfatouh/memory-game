@@ -4,19 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="fireworks.css">
     <link rel="stylesheet" href="main.css">
 </head>
 
 <body>
 
-    <!-- <div class="overlay">
+    <div class="overlay">
         <button class="start">Start</button>
         <select>
             <option value="easy">Easy</option>
             <option value="intermediate">Intermediate</option>
             <option value="hard">Hard</option>
         </select>
-    </div> -->
+    </div>
 
     <div class="game-extras">
         <div class="options">
@@ -30,7 +31,7 @@
         </div>
 
         <div class="info">
-            <div class="name">name: <span></span></div>
+            <div class="name">name:&nbsp;<span></span></div>
             <div class="game-info">
                 <span class='wrong-tries'>wrong tries: <span class="tries-num">0</span> </span>
             </div>
@@ -44,7 +45,15 @@
         </div>
     </div>
 
-    <div class="win" style='opacity: 0; display: none;'>Congratulations!</div>
+    <div class="win" style='opacity: 0; display: none;'>
+        <div class="pyro">
+            <div class="before"></div>
+            <div class="after"></div>
+        </div>
+        <div>Congratulations!</div>
+    </div>
+
+
 
     <script src="main.js"></script>
 </body>

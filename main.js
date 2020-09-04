@@ -1,10 +1,10 @@
-//starting the game
-// document.querySelector('.overlay button').onclick = () => {
-//     document.querySelector('.info .name span').textContent = prompt('Enter your name: ') || 'unnamed';
-//     GAME_DIFFICULTY = document.querySelector('.overlay select').value;
-//     setUpGame(GAME_DIFFICULTY);
-//     document.querySelector('.overlay').remove();
-// }
+// starting the game
+document.querySelector('.overlay button').onclick = () => {
+    document.querySelector('.info .name span').textContent = prompt('Enter your name: ') || 'unnamed';
+    GAME_DIFFICULTY = document.querySelector('.overlay select').value;
+    setUpGame(GAME_DIFFICULTY);
+    document.querySelector('.overlay').remove();
+}
 
 
 
@@ -15,10 +15,7 @@ let radios = document.querySelectorAll('.options input');
 
 let TRANSITION_DURATION = 500
 let TIMEOUT_DURATION = TRANSITION_DURATION * 2;
-// let GAME_DIFFICULTY = document.querySelector('.overlay select').value;
-
-GAME_DIFFICULTY = 'easy' //temporarily set to easy
-setUpGame(GAME_DIFFICULTY);
+let GAME_DIFFICULTY;
 
 //choosing difficulty
 radios.forEach(radio => {
@@ -123,7 +120,7 @@ function win() {
         winDiv.style.opacity = '0';
         setTimeout(() => winDiv.style.display = 'none', 700);
         cardContainer.style.filter = 'blur(0px)'
-    }, 3000)
+    }, 7000)
 }
 
 function shuffle() {
