@@ -4,9 +4,10 @@
 }
 
 :root {
-    --container-width: 600px;
-    --container-height: 480px;
-    --card-size: 100px;
+    --container-width: 95%;
+    --container-height: 80%;
+    --card-width: 100px;
+    --card-height: 100px;
     --card-margin: 10px;
 }
 
@@ -112,12 +113,13 @@ body {
     background-color: #eee;
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-evenly;
     position: relative;
 }
 
 .card-container .card {
-    height: var(--card-size);
-    width: var(--card-size);
+    height: var(--card-height);
+    width: var(--card-width);
     margin: var(--card-margin);
     position: relative;
     cursor: pointer;

@@ -67,10 +67,11 @@ function fillCardsWithId() {
 
 //settign cards background
 function setCardsBackgroundFromData() {
-    let backImgSize = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-size'));
+    let backImgWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-width'));
+    let backImgHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-height'));
     document.querySelectorAll('.card .back').forEach(cardBack => {
         let id = cardBack.parentElement.dataset.imgid;
-        cardBack.style.backgroundImage = `url('https://picsum.photos/id/${id}/${backImgSize}')`;
+        cardBack.style.backgroundImage = `url('https://picsum.photos/id/${id}/${backImgWidth}/${backImgHeight}')`;
     })
 }
 
@@ -126,21 +127,18 @@ function shuffle() {
 function setDimensions(difficulty) {
     switch (difficulty) {
         case 'easy':
-            document.documentElement.style.setProperty('--container-width', '600px');
-            document.documentElement.style.setProperty('--container-height', '480px');
-            document.documentElement.style.setProperty('--card-size', '100px');
+            document.documentElement.style.setProperty('--card-width', '235px');
+            document.documentElement.style.setProperty('--card-height', '104px');
             document.documentElement.style.setProperty('--card-margin', '10px');
             break;
         case 'intermediate':
-            document.documentElement.style.setProperty('--container-width', '546px');
-            document.documentElement.style.setProperty('--container-height', '455px');
-            document.documentElement.style.setProperty('--card-size', '75px');
+            document.documentElement.style.setProperty('--card-width', '196px');
+            document.documentElement.style.setProperty('--card-height', '84px');
             document.documentElement.style.setProperty('--card-margin', '8px');
             break;
         case 'hard':
-            document.documentElement.style.setProperty('--container-width', '480px');
-            document.documentElement.style.setProperty('--container-height', '360px');
-            document.documentElement.style.setProperty('--card-size', '50px');
+            document.documentElement.style.setProperty('--card-width', '150px');
+            document.documentElement.style.setProperty('--card-height', '73px');
             document.documentElement.style.setProperty('--card-margin', '5px');
             break;
     }
