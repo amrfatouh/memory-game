@@ -6,6 +6,11 @@ document.querySelector('.overlay button').onclick = () => {
     document.querySelector('.overlay').remove();
 }
 
+// function removeOverlay() {
+//     GAME_DIFFICULTY = document.querySelector('.overlay select').value;
+//     setUpGame(GAME_DIFFICULTY);
+//     document.querySelector('.overlay').remove();
+// }
 
 
 let cardContainer = document.querySelector('.card-container');
@@ -16,6 +21,7 @@ let radios = document.querySelectorAll('.options input');
 let TRANSITION_DURATION = 500
 let TIMEOUT_DURATION = TRANSITION_DURATION * 2;
 let GAME_DIFFICULTY;
+
 
 //choosing difficulty
 radios.forEach(radio => {
@@ -116,10 +122,13 @@ function win() {
     winDiv.style.display = 'block';
     winDiv.style.opacity = '1';
     cardContainer.style.filter = 'blur(5px)'
+    //making body's overflow hidden
+    document.body.style.overflow = 'hidden';
     setTimeout(() => {
         winDiv.style.opacity = '0';
         setTimeout(() => winDiv.style.display = 'none', 700);
         cardContainer.style.filter = 'blur(0px)'
+        document.body.style.overflow = 'auto';
     }, 7000)
 }
 
