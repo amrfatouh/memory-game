@@ -127,6 +127,7 @@ body {
     cursor: pointer;
     border-radius: 10px;
     overflow: hidden;
+    transition: opacity .5s;
 }
 
 .card .front, .card .back {

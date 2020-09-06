@@ -6,11 +6,11 @@ document.querySelector('.overlay button').onclick = () => {
     document.querySelector('.overlay').remove();
 }
 
-// function removeOverlay() {
-//     GAME_DIFFICULTY = document.querySelector('.overlay select').value;
-//     setUpGame(GAME_DIFFICULTY);
-//     document.querySelector('.overlay').remove();
-// }
+function removeOverlay() {
+    GAME_DIFFICULTY = document.querySelector('.overlay select').value;
+    setUpGame(GAME_DIFFICULTY);
+    document.querySelector('.overlay').remove();
+}
 
 
 let cardContainer = document.querySelector('.card-container');
@@ -22,6 +22,7 @@ let TRANSITION_DURATION = 500
 let TIMEOUT_DURATION = TRANSITION_DURATION * 2;
 let GAME_DIFFICULTY;
 
+removeOverlay();
 
 //choosing difficulty
 radios.forEach(radio => {
@@ -167,15 +168,25 @@ function setDimensions(difficulty) {
 
 //creating all cards
 function createCards(num) {
-    cards.forEach((card, i) => card.remove())
+    cards.forEach((card, i) => {
+        card.style.opacity = '0';
+        //remove cards after the transition animation ends
+        setTimeout(() => card.remove(), TRANSITION_DURATION);
+    });
     let cardModel = document.querySelector('.card');
     for (let i = 0; i < num; i++) {
         let newCard = cardModel.cloneNode(true);
+        //adding the opacity = 0 before adding class 'playable' as it has a transition for opacity and we don't need it
+        newCard.style.opacity = '0';
         newCard.classList.add('playable');
-        newCard.style.display = 'block';
         cardContainer.appendChild(newCard);
+        setTimeout(() => {
+            //make new cards take their place in card board after transition duration
+            newCard.style.display = 'block';
+            //make a small break between changing display and opacity properties as changeing display cuts the transition
+            setTimeout(() => newCard.style.opacity = '1', 10);
+        }, TRANSITION_DURATION);
     }
-    // cardModel.remove();
 }
 
 function flipAllCards() {
@@ -189,7 +200,8 @@ function setUpGame(difficulty) {
     GAME_DIFFICULTY = difficulty;
     //checking the right radio button (specially for the first time the game starts)
     Array.from(radios).find(radio => radio.dataset.difficulty === GAME_DIFFICULTY).checked = true;
-    setDimensions(difficulty);
+    //setting dimensions after the opacity transition animation ends (the canvas changes its dimensions if the difficulty is changed , so the old card formation doesn't fit in the new dimensions)
+    setTimeout(() => setDimensions(difficulty), TRANSITION_DURATION);
     switch (difficulty) {
         case 'easy':
             createCards(20);
@@ -204,9 +216,12 @@ function setUpGame(difficulty) {
     cards = document.querySelectorAll('.card.playable');
     setTimeout(flipAllCards, 1000);
     addEventListenersForCards();
-    imageIdArr = makeImageIdArr();
-    fillCardsWithId();
-    setCardsBackgroundFromData();
-    shuffle();
+    //making timeout for these functions as they depend on the dimensions (which have a timout function)
+    setTimeout(() => {
+        imageIdArr = makeImageIdArr();
+        fillCardsWithId();
+        setCardsBackgroundFromData();
+        shuffle();
+    }, TRANSITION_DURATION);
     document.querySelector('.info span.tries-num').textContent = 0;
 }
