@@ -275,8 +275,11 @@ function setUpGame(difficulty) {
     //checking the right radio button (specially for the first time the game starts)
     Array.from(radios).find(radio => radio.dataset.difficulty === GAME_DIFFICULTY).checked = true;
     //setting dimensions after the opacity transition animation ends (the canvas changes its dimensions if the difficulty is changed , so the old card formation doesn't fit in the new dimensions)
-    if (difficulty !== 'custom') setTimeout(() => setDimensions(difficulty), TRANSITION_DURATION);
-    createCards(Game.difficulty[difficulty].cardsCount);
+    if (difficulty !== 'custom') {
+        setTimeout(() => setDimensions(difficulty), TRANSITION_DURATION);
+        createCards(Game.difficulty[difficulty].cardsCount);
+    }
+
     setTimeout(flipAllCards, 1000);
     addEventListenersForCards();
     //making timeout for these functions as they depend on the dimensions (which have a timout function)
