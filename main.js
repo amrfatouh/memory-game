@@ -1,9 +1,7 @@
 // starting the game
 document.querySelector('.overlay button').onclick = () => {
     document.querySelector('.info .name span').textContent = prompt('Enter your name: ') || 'unnamed';
-    GAME_DIFFICULTY = document.querySelector('.overlay select').value;
-    setUpGame(GAME_DIFFICULTY);
-    document.querySelector('.overlay').remove();
+    removeOverlay();
 }
 
 function removeOverlay() {
@@ -22,18 +20,55 @@ let TRANSITION_DURATION = 500
 let TIMEOUT_DURATION = TRANSITION_DURATION * 2;
 let GAME_DIFFICULTY;
 
-removeOverlay();
+// removeOverlay();
 
 //choosing difficulty
 radios.forEach(radio => {
     radio.onclick = function () {
+        document.querySelector('.level-editor').style.display = 'none';
         if (confirm('Your progress will be erased. Are you sure?')) {
-            setUpGame(radio.dataset.difficulty);
+            if (radio.dataset.difficulty !== 'custom') {
+                setUpGame(radio.dataset.difficulty);
+            } else {
+                document.querySelector('.level-editor').style.display = 'block';
+                setUpGameCustom(10);
+            }
         } else {
             document.querySelector(`.options input[data-difficulty=${GAME_DIFFICULTY}]`).checked = true;
         }
     }
 })
+
+function handleRangeUpdate() {
+    let cardsNumber = Number(document.querySelector('.level-editor input:last-of-type').value);
+    document.documentElement.style.setProperty(this.dataset.property, this.value);
+    //recreate the cards with the new dimensions
+    setUpGameCustom(cardsNumber);
+}
+
+let rangeInputs = document.querySelectorAll('.level-editor input');
+rangeInputs.forEach(input => {
+    if (input.dataset.property != undefined) {
+        input.addEventListener('change', handleRangeUpdate);
+        //add mousemove event listener only if the input is clicked
+        input.addEventListener('mousedown', () => input.addEventListener('mousemove', handleRangeUpdate));
+        //remove the mouse move event listener as the user releases the mouse button
+        input.addEventListener('mouseup', () => input.removeEventListener('mousemove', handleRangeUpdate));
+    } else {
+        input.addEventListener('change', function () {
+            setUpGameCustom(Number(input.value));
+        });
+        input.addEventListener('mousemove', function () {
+            setUpGameCustom(Number(input.value));
+        });
+
+    }
+})
+document.querySelector('.level-editor button').onclick = function () {
+    document.querySelector('.level-editor').style.display = 'none';
+    cardContainer.classList.remove('no-clicking');
+    setTimeout(flipAllCards, 1000);
+}
 
 
 // document.body.onblur = function () {
@@ -73,7 +108,7 @@ function fillCardsWithId() {
 function setCardsBackgroundFromData() {
     let backImgWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-width'));
     let backImgHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-height'));
-    document.querySelectorAll('.card .back').forEach(cardBack => {
+    document.querySelectorAll('.card.playable .back').forEach(cardBack => {
         let id = cardBack.parentElement.dataset.imgid;
         cardBack.style.backgroundImage = `url('https://picsum.photos/id/${id}/${backImgWidth}/${backImgHeight}')`;
     })
@@ -223,5 +258,29 @@ function setUpGame(difficulty) {
         setCardsBackgroundFromData();
         shuffle();
     }, TRANSITION_DURATION);
+    document.querySelector('.info span.tries-num').textContent = 0;
+}
+
+function createCardsCustom(num) {
+    cards.forEach((card, i) => card.remove());
+    let cardModel = document.querySelector('.card');
+    for (let i = 0; i < num; i++) {
+        let newCard = cardModel.cloneNode(true);
+        newCard.style.display = 'block';
+        newCard.classList.add('playable');
+        cardContainer.appendChild(newCard);
+    }
+}
+
+function setUpGameCustom(num) {
+    cardContainer.classList.add('no-clicking');
+    createCardsCustom(num)
+    cards = document.querySelectorAll('.card.playable');
+    // setTimeout(flipAllCards, 1000);
+    addEventListenersForCards();
+    imageIdArr = makeImageIdArr();
+    fillCardsWithId();
+    setCardsBackgroundFromData();
+    shuffle();
     document.querySelector('.info span.tries-num').textContent = 0;
 }

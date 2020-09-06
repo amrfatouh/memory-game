@@ -72,7 +72,7 @@ body {
     color: #fff;
     padding: 15px;
     display: inline-block;
-    flex: 1;
+    flex: 40;
 }
 
 .options h2 {
@@ -93,7 +93,7 @@ body {
 .info {
     padding: 5px 15px;
     font-size: 20px;
-    flex: 2;
+    flex: 60;
     background-color: rgb(47, 162, 216);
     color: #fff;
     display: inline-flex;
@@ -103,6 +103,34 @@ body {
     flex: 1;
     display: flex;
     align-items: center;
+}
+
+.level-editor {
+    width: 100%;
+    background-color: rgb(179, 161, 207);
+    margin-bottom: 20px;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 20px;
+    color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 0 10px 1px rgb(179, 161, 207);
+}
+
+.level-editor input {
+    margin-right: 30px;
+    position: relative;
+    top: 3px;
+}
+
+.level-editor button {
+    padding: 4px 12px;
+    font-size: 18px;
+    background-color: rgb(115, 54, 156);
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
 }
 
 .card-container {

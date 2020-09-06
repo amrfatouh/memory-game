@@ -28,6 +28,9 @@
             <label for="intermediate">intermediate</label>
             <input type="radio" name="diff" data-difficulty='hard'>
             <label for="hard">hard</label>
+            <input type="radio" name="diff" data-difficulty='custom'>
+            <label for="custom">custom</label>
+
         </div>
 
         <div class="info">
@@ -36,6 +39,19 @@
                 <span class='wrong-tries'>wrong tries: <span class="tries-num">0</span> </span>
             </div>
         </div>
+    </div>
+
+    <div class="level-editor" style='display: none;'>
+        <label for="card-width-range">card width: </label>
+        <input type="range" data-property='--card-width' id="card-width-range" min='100' max='300' value='200'>
+        <label for="card-height-range">card height: </label>
+        <input type="range" data-property='--card-height' id="card-height-range" min='50' max='200' value='100'>
+        <label for="cards-margin">card margin: </label>
+        <input type="range" data-property='--card-margin' id="card-margin-range" min='2' max='15' value='12'>
+        <label for="cards-number">cards number: </label>
+        <input type="range" id="cards-number" min='10' max='60' step="2" value="10">
+        <button>Done</button>
+
     </div>
 
     <div class="card-container">
