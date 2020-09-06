@@ -1,73 +1,90 @@
-// starting the game
-document.querySelector('.overlay button').onclick = () => {
-    document.querySelector('.info .name span').textContent = prompt('Enter your name: ') || 'unnamed';
-    removeOverlay();
-}
-
-function removeOverlay() {
-    GAME_DIFFICULTY = document.querySelector('.overlay select').value;
-    setUpGame(GAME_DIFFICULTY);
-    document.querySelector('.overlay').remove();
-}
-
-
+//defining main variables
 let cardContainer = document.querySelector('.card-container');
 let cards = document.querySelectorAll('.card.playable');
 let imageIdArr = makeImageIdArr();
 let radios = document.querySelectorAll('.options input');
+let rangeInputs = document.querySelectorAll('.level-editor input');
 
 let TRANSITION_DURATION = 500
 let TIMEOUT_DURATION = TRANSITION_DURATION * 2;
 let GAME_DIFFICULTY;
 
+// starting the game flow
+addEventListenerToOverlayButton();
+//once overlay is gone, navigation in game is done using radio buttons
+addListenersToRadios();
+addEventListenersToLevelEditorItems();
+
+function addEventListenerToOverlayButton() {
+    document.querySelector('.overlay button').onclick = () => {
+        document.querySelector('.info .name span').textContent = prompt('Enter your name: ') || 'unnamed';
+        removeOverlay();
+    }
+}
+function removeOverlay() {
+    setUpGame(document.querySelector('.overlay select').value);
+    document.querySelector('.overlay').remove();
+}
+
 // removeOverlay();
 
 //choosing difficulty
-radios.forEach(radio => {
-    radio.onclick = function () {
-        document.querySelector('.level-editor').style.display = 'none';
-        if (confirm('Your progress will be erased. Are you sure?')) {
-            if (radio.dataset.difficulty !== 'custom') {
-                setUpGame(radio.dataset.difficulty);
+function addListenersToRadios() {
+    radios.forEach(radio => {
+        radio.onclick = function () {
+            document.querySelector('.level-editor').style.display = 'none';
+            if (confirm('Your progress will be erased. Are you sure?')) {
+                if (radio.dataset.difficulty !== 'custom') {
+                    setUpGame(radio.dataset.difficulty);
+                } else {
+                    document.querySelector('.level-editor').style.display = 'block';
+                    updateRangeInputsFromCards();
+                    createCards(10, true);
+                }
             } else {
-                document.querySelector('.level-editor').style.display = 'block';
-                setUpGameCustom(10);
+                //returning the checking to the radio button representing current level
+                document.querySelector(`.options input[data-difficulty=${GAME_DIFFICULTY}]`).checked = true;
             }
-        } else {
-            document.querySelector(`.options input[data-difficulty=${GAME_DIFFICULTY}]`).checked = true;
         }
-    }
-})
+    })
+}
+function updateRangeInputsFromCards() {
+    Array.from(rangeInputs).filter(i => i.dataset.property).forEach(input => {
+        input.value = parseInt(getComputedStyle(document.documentElement).getPropertyValue(input.dataset.property));
+    })
+}
 
 function handleRangeUpdate() {
     let cardsNumber = Number(document.querySelector('.level-editor input:last-of-type').value);
     document.documentElement.style.setProperty(this.dataset.property, this.value);
     //recreate the cards with the new dimensions
-    setUpGameCustom(cardsNumber);
+    createCards(cardsNumber, true);
+}
+function handleCardNumberInputUpdate() {
+    createCards(Number(this.value), true);
 }
 
-let rangeInputs = document.querySelectorAll('.level-editor input');
-rangeInputs.forEach(input => {
-    if (input.dataset.property != undefined) {
-        input.addEventListener('change', handleRangeUpdate);
-        //add mousemove event listener only if the input is clicked
-        input.addEventListener('mousedown', () => input.addEventListener('mousemove', handleRangeUpdate));
-        //remove the mouse move event listener as the user releases the mouse button
-        input.addEventListener('mouseup', () => input.removeEventListener('mousemove', handleRangeUpdate));
-    } else {
-        input.addEventListener('change', function () {
-            setUpGameCustom(Number(input.value));
-        });
-        input.addEventListener('mousemove', function () {
-            setUpGameCustom(Number(input.value));
-        });
+function addEventListenersToLevelEditorItems() {
+    rangeInputs.forEach(input => {
+        if (input.dataset.property != undefined) {
+            input.addEventListener('change', handleRangeUpdate);
+            //add mousemove event listener only if the input is clicked
+            input.addEventListener('mousedown', () => input.addEventListener('mousemove', handleRangeUpdate));
+            //remove the mouse move event listener as the user releases the mouse button
+            input.addEventListener('mouseup', () => input.removeEventListener('mousemove', handleRangeUpdate));
+        } else {
+            input.addEventListener('change', handleCardNumberInputUpdate);
+            input.addEventListener('mousedown', () => input.addEventListener('mousemove', handleCardNumberInputUpdate));
+            input.addEventListener('mouseup', () => input.removeEventListener('mousemove', handleCardNumberInputUpdate));
 
+        }
+    })
+    document.querySelector('.level-editor button').onclick = function () {
+        document.querySelector('.level-editor').style.display = 'none';
+        setUpGame('custom');
+        cardContainer.classList.remove('no-clicking');
+        setTimeout(flipAllCards, 1000);
     }
-})
-document.querySelector('.level-editor button').onclick = function () {
-    document.querySelector('.level-editor').style.display = 'none';
-    cardContainer.classList.remove('no-clicking');
-    setTimeout(flipAllCards, 1000);
 }
 
 
@@ -113,13 +130,24 @@ function setCardsBackgroundFromData() {
         cardBack.style.backgroundImage = `url('https://picsum.photos/id/${id}/${backImgWidth}/${backImgHeight}')`;
     })
 }
-
 function addEventListenersForCards() {
     cards.forEach(card => {
         card.addEventListener('click', () => {
             card.classList.add('flipped');
             checkIf2();
         })
+    })
+}
+function shuffle() {
+    let orderArr = [];
+    while (orderArr.length !== cards.length) {
+        let random = Math.floor(Math.random() * cards.length);
+        if (!(orderArr.includes(random))) {
+            orderArr.push(random);
+        }
+    }
+    cards.forEach((card, i) => {
+        card.style.order = orderArr[i]
     })
 }
 
@@ -168,19 +196,6 @@ function win() {
     }, 7000)
 }
 
-function shuffle() {
-    let orderArr = [];
-    while (orderArr.length !== cards.length) {
-        let random = Math.floor(Math.random() * cards.length);
-        if (!(orderArr.includes(random))) {
-            orderArr.push(random);
-        }
-    }
-    cards.forEach((card, i) => {
-        card.style.order = orderArr[i]
-    })
-}
-
 function setDimensions(difficulty) {
     switch (difficulty) {
         case 'easy':
@@ -202,26 +217,40 @@ function setDimensions(difficulty) {
 }
 
 //creating all cards
-function createCards(num) {
-    cards.forEach((card, i) => {
-        card.style.opacity = '0';
-        //remove cards after the transition animation ends
-        setTimeout(() => card.remove(), TRANSITION_DURATION);
-    });
-    let cardModel = document.querySelector('.card');
-    for (let i = 0; i < num; i++) {
-        let newCard = cardModel.cloneNode(true);
-        //adding the opacity = 0 before adding class 'playable' as it has a transition for opacity and we don't need it
-        newCard.style.opacity = '0';
-        newCard.classList.add('playable');
-        cardContainer.appendChild(newCard);
-        setTimeout(() => {
-            //make new cards take their place in card board after transition duration
+function createCards(num, custom = false) {
+    if (custom) {
+        //create cards without fading out and in (for custom levels)
+        cards.forEach((card, i) => card.remove());
+        let cardModel = document.querySelector('.card');
+        for (let i = 0; i < num; i++) {
+            let newCard = cardModel.cloneNode(true);
             newCard.style.display = 'block';
-            //make a small break between changing display and opacity properties as changeing display cuts the transition
-            setTimeout(() => newCard.style.opacity = '1', 10);
-        }, TRANSITION_DURATION);
+            newCard.classList.add('playable');
+            cardContainer.appendChild(newCard);
+        }
+    } else {
+        //create cards with fading out and in animations (for standard levels)
+        cards.forEach((card, i) => {
+            card.style.opacity = '0';
+            //remove cards after the transition animation ends
+            setTimeout(() => card.remove(), TRANSITION_DURATION);
+        });
+        let cardModel = document.querySelector('.card');
+        for (let i = 0; i < num; i++) {
+            let newCard = cardModel.cloneNode(true);
+            //adding the opacity = 0 before adding class 'playable' as it has a transition for opacity and we don't need it
+            newCard.style.opacity = '0';
+            newCard.classList.add('playable');
+            cardContainer.appendChild(newCard);
+            setTimeout(() => {
+                //make new cards take their place in card board after transition duration
+                newCard.style.display = 'block';
+                //make a small break between changing display and opacity properties as changeing display cuts the transition
+                setTimeout(() => newCard.style.opacity = '1', 10);
+            }, TRANSITION_DURATION);
+        }
     }
+    cards = document.querySelectorAll('.card.playable');
 }
 
 function flipAllCards() {
@@ -248,7 +277,6 @@ function setUpGame(difficulty) {
             createCards(48);
             break;
     }
-    cards = document.querySelectorAll('.card.playable');
     setTimeout(flipAllCards, 1000);
     addEventListenersForCards();
     //making timeout for these functions as they depend on the dimensions (which have a timout function)
@@ -258,29 +286,5 @@ function setUpGame(difficulty) {
         setCardsBackgroundFromData();
         shuffle();
     }, TRANSITION_DURATION);
-    document.querySelector('.info span.tries-num').textContent = 0;
-}
-
-function createCardsCustom(num) {
-    cards.forEach((card, i) => card.remove());
-    let cardModel = document.querySelector('.card');
-    for (let i = 0; i < num; i++) {
-        let newCard = cardModel.cloneNode(true);
-        newCard.style.display = 'block';
-        newCard.classList.add('playable');
-        cardContainer.appendChild(newCard);
-    }
-}
-
-function setUpGameCustom(num) {
-    cardContainer.classList.add('no-clicking');
-    createCardsCustom(num)
-    cards = document.querySelectorAll('.card.playable');
-    // setTimeout(flipAllCards, 1000);
-    addEventListenersForCards();
-    imageIdArr = makeImageIdArr();
-    fillCardsWithId();
-    setCardsBackgroundFromData();
-    shuffle();
     document.querySelector('.info span.tries-num').textContent = 0;
 }
