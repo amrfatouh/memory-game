@@ -9,6 +9,30 @@ let TRANSITION_DURATION = 500
 let TIMEOUT_DURATION = TRANSITION_DURATION * 2;
 let GAME_DIFFICULTY;
 
+let Game = {
+    difficulty: {
+        easy: {
+            width: 235,
+            height: 104,
+            margin: 10,
+            cardsCount: 20
+        },
+        intermediate: {
+            width: 196,
+            height: 84,
+            margin: 8,
+            cardsCount: 30
+        },
+        hard: {
+            width: 149,
+            height: 73,
+            margin: 5,
+            cardsCount: 48
+        }
+
+    }
+};
+
 // starting the game flow
 addEventListenerToOverlayButton();
 //once overlay is gone, navigation in game is done using radio buttons
@@ -197,23 +221,9 @@ function win() {
 }
 
 function setDimensions(difficulty) {
-    switch (difficulty) {
-        case 'easy':
-            document.documentElement.style.setProperty('--card-width', '235px');
-            document.documentElement.style.setProperty('--card-height', '104px');
-            document.documentElement.style.setProperty('--card-margin', '10px');
-            break;
-        case 'intermediate':
-            document.documentElement.style.setProperty('--card-width', '196px');
-            document.documentElement.style.setProperty('--card-height', '84px');
-            document.documentElement.style.setProperty('--card-margin', '8px');
-            break;
-        case 'hard':
-            document.documentElement.style.setProperty('--card-width', '149px');
-            document.documentElement.style.setProperty('--card-height', '73px');
-            document.documentElement.style.setProperty('--card-margin', '5px');
-            break;
-    }
+    document.documentElement.style.setProperty('--card-width', Game.difficulty[difficulty].width);
+    document.documentElement.style.setProperty('--card-height', Game.difficulty[difficulty].height);
+    document.documentElement.style.setProperty('--card-margin', Game.difficulty[difficulty].margin);
 }
 
 //creating all cards
@@ -265,18 +275,8 @@ function setUpGame(difficulty) {
     //checking the right radio button (specially for the first time the game starts)
     Array.from(radios).find(radio => radio.dataset.difficulty === GAME_DIFFICULTY).checked = true;
     //setting dimensions after the opacity transition animation ends (the canvas changes its dimensions if the difficulty is changed , so the old card formation doesn't fit in the new dimensions)
-    setTimeout(() => setDimensions(difficulty), TRANSITION_DURATION);
-    switch (difficulty) {
-        case 'easy':
-            createCards(20);
-            break;
-        case 'intermediate':
-            createCards(30);
-            break;
-        case 'hard':
-            createCards(48);
-            break;
-    }
+    if (difficulty !== 'custom') setTimeout(() => setDimensions(difficulty), TRANSITION_DURATION);
+    createCards(Game.difficulty[difficulty].cardsCount);
     setTimeout(flipAllCards, 1000);
     addEventListenersForCards();
     //making timeout for these functions as they depend on the dimensions (which have a timout function)
